@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Compass</title>
+<script type="text/javascript">
+window.onload = function()
+{
+	if (window.DeviceOrientationEvent) {
+		window.addEventListener('deviceorientation', function(eventData) {
+			
+			var absBeta = Math.abs(eventData.beta);
+			var factor = 1;
+			if(absBeta > 90)
+			{
+				factor = -1;
+			}
+			
+			var heading = (eventData.alpha * factor ) - window.orientation - 90;
+			if(heading > 360)
+			{
+				heading -= 360;
+			}
+			var info = heading * -1;
+			if(info < 0)
+			{
+				info += 360;
+			}
+			document.getElementById('heading').innerHTML = info.toFixed(5);
+			document.getElementById('box2').style.transform = 'rotate('+(heading)+'deg)';
+			document.getElementById('box2').setAttribute('data-flip', (factor==-1)?'true':'false');
+		}, false);
+	}
+}
+</script>
+<style type="text/css">
+body{
+	margin:0;
+	padding:0;
+}
+#box1{
+	width:280px;
+	height:280px;
+	margin-top:calc(50vh - 140px);
+	margin-left:auto;
+	margin-right:auto;
+	padding:14px;
+	box-sizing:border-box;
+	border:5px solid #000000;
+	border-radius:150px;
+	position:relative;
+	background:url(bg.png) no-repeat center center;
+}
+.compass[data-flip="true"]{
+	background:url(compass-flip.png) no-repeat center center;
+}
+.compass[data-flip="false"]{
+	background:url(compass.png) no-repeat center center;
+}
+#box2{
+	width:240px;
+	height:240px;
+	margin:0px auto;
+}
+#heading{
+	position:absolute;
+	left:0;
+	right:0;
+	top:-30px;
+	text-align:center;
+	font-size:16px;
+}
+</style>
+</head>
+<body>
+<div id="box1">
+<div id="heading"></div>
+<div id="box2" class="compass" data-flip="false"></div>
+</div>
+</body>
+</html>
